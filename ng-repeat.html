@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+        <title>ng-repear</title>
+    </head>
+    <body>
+        <div ng-app="" ng-init="names=[
+        {name: 'kim', country: 'Korea'},
+        {name: 'kang', country: 'Japan'},
+        {name: 'jing', country: 'South Africa'}
+        ]">
+            <ul>
+                <li ng-repeat="x in names">
+                    {{ x.country + "에서 온 " + x.name }}
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HealthBreeze Animation</title>
+</head>
+
+<body style="margin: 0; overflow: hidden">
+    <div style="width: 720px; height: 52px">
+        <img src="/static/img/HBlogowideTop-960.png" width="100%" border="0" style="position: relative; width: 100%" alt="HealthBreeze Banner Image">
+        <p style="width: 80%; position: absolute; left: 10px;
+            top: 5px;
+
+            color: white">������ ���� ���ʺ� ���󿹹���Ģ �ȳ�</p>
+    </div>
+    <div id="playerYT"></div>
+
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var playerYT = null;
+        function onYouTubeIframeAPIReady() {
+
+            playerYT = new YT.Player('playerYT', {
+                height: 405,
+                width: 720,
+                videoId: 'IltRkcjkkMo',
+                playerVars: {
+                    'controls': 2,
+                    'autohide': 1,
+                    'rel': 0,
+                    'autoplay': 1,
+                    'showinfo': 0 },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+        }
+    </script>
+</body>
+
+</html>

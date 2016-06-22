@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+        <title>안녕하세요</title>
+    </head>
+    <body>
+        <div ng-app="">
+            <p>
+                Name: <input type="text" ng-model="name" />
+            </p>
+            <p ng-bind="name">
+
+            </p>
+            <div ng-app="">
+                <p>
+                    My first expression: {{ 5+ 5 }}
+                </p>
+            </div>
+            <p>
+                Try to change the names.
+            </p>
+            <div ng-app="myApp" ng-controller="myCtrl">
+                First Name: <input type="text" ng-model="firsrName" /><br />
+                Last Name: <input type="text" ng-model="lastName" /><br />
+                <br />
+                Full Name: {{ fullName }}
+            </div>
+        </div>
+        <script>
+            var app = angular.module('myApp', []);
+            app.controller('myCtrl', function($scope) {
+                $scope.firstName = "Kim";
+                $scope.lastName = "Dong-Hyeon";
+                $scope.fullName = $scope.firstName + $scope.lastName;
+            });
+        </script>
+    </body>
+</html>

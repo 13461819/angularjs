@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <style>
+            body {
+                width: 1200px;
+                height: 800px;
+                padding: 50px 0 0 30px;
+                background-color: #FAFAFA;
+            }
+            .ivory2 {
+                background: rgb(255, 255, 66);
+            }
+            .ng-cloak,
+            .x-ng-cloak,
+            [data-ng-cloak],
+            [ng-cloak],
+            [ng\:cloak],
+            [x-ng-cloak] {
+                display: none !important;
+            }
+            .width100 {
+                width: 100%;
+                font-size: 18px;
+            }
+            .dataInputTitle {
+                padding-top: 70px !important;
+            }
+            md-option > div {
+                font-size: 22px !important;
+            }
+            .apiBtn span {
+                font-size: 35px;
+            }
+        </style>
+        <title>This is new EMR API test Page with Angular Meterial</title>
+    </head>
+    <body ng-app="EMRApp" ng-controller="EMRCtrl" class="ng-cloak">
+        <md-grid-list md-cols="23" md-row-height="1:1" md-gutter="6px">
+            <md-grid-tile class="ivory" md-rowspan="2" md-colspan="8">
+                <md-input-container style="width: 250px; font-size: 20px">
+                    <label>API를 선택하세요</label>
+                    <md-select ng-model="apiList">
+                        <md-option ng-repeat="API in APIs" value="{{$index}}" ng-click="changeTab($index)">{{API}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </md-grid-tile>
+            <md-grid-tile class="ivory" md-colspan="3" style="font-size: 30px">EMR</md-grid-tile>
+            <md-grid-tile class="ivory dataInputTitle" md-colspan="5">
+                <form name="emr_idForm" class="width100">
+                    <md-input-container class="width100">
+                        <label>emr_id</label>
+                        <input type="text" required name="emr_id" ng-model="emr_id">
+                        <div ng-messages="emr_idForm.emr_id.$error" role="alert">
+                            <div ng-message-exp="['required']">
+                                emr_id를 입력해주세요!
+                            </div>
+                        </div>
+                    </md-input-container>
+                </form>
+            </md-grid-tile>
+            <md-grid-tile class="ivory dataInputTitle" md-colspan="7">
+                <form name="emr_api_keyForm" class="width100">
+                    <md-input-container class="width100">
+                        <label>emr_api_key</label>
+                        <input type="password" required name="emr_api_key" ng-model="emr_api_key">
+                        <div ng-messages="emr_api_keyForm.emr_api_key.$error" role="alert">
+                            <div ng-message-exp="['required']">
+                                emr_api_key를 입력해주세요!
+                            </div>
+                        </div>
+                    </md-input-container>
+                </form>
+            </md-grid-tile>
+            <md-grid-tile class="ivory" md-colspan="3" style="font-size: 30px">USER</md-grid-tile>
+            <md-grid-tile class="ivory dataInputTitle" md-colspan="5">
+                <form name="user_idForm" class="width100">
+                    <md-input-container class="width100">
+                        <label>user_id</label>
+                        <input type="text" required name="user_id" ng-model="user_id">
+                        <div ng-messages="user_idForm.user_id.$error" role="alert">
+                            <div ng-message-exp="['required']">
+                                user_id를 입력해주세요!
+                            </div>
+                        </div>
+                    </md-input-container>
+                </form>
+            </md-grid-tile>
+            <md-grid-tile class="ivory dataInputTitle" md-colspan="7">
+                <form name="user_api_keyForm" class="width100">
+                    <md-input-container class="width100">
+                        <label>user_api_key</label>
+                        <input type="password" required name="user_api_key" ng-model="user_api_key">
+                        <div ng-messages="user_api_keyForm.user_api_key.$error" role="alert">
+                            <div ng-message-exp="['required']">
+                                user_api_key를 입력해주세요!
+                            </div>
+                        </div>
+                    </md-input-container>
+                </form>
+            </md-grid-tile>
+            <md-grid-tile class="ivory" md-colspan="23"></md-grid-tile>
+            <md-grid-tile class="ivory" md-rowspan="14" md-colspan="11" md-whiteframe="6">
+                <div layout="column" layout-fill>
+                    <md-toolbar>
+                        <div class="md-toolbar-tools" align="center">
+                            <h1 class="md-flex">INPUT</h1>
+                        </div>
+                    </md-toolbar>
+                    <md-content style="width: 100%; height: 100%; background-color: #FAFAFA">
+                        <md-tabs md-border-bottom flex md-dynamic-height>
+                            <md-tab label="{{ tab.title }}" ng-repeat="tab in curTab">
+                                <div class="md-padding" style="font-size:30px">
+                                    type: {{ tab.type }} <br />
+                                    url: {{ tab.url }} <br />
+                                    <div ng-show="tab.hasOwnProperty('data')">
+                                        data: <br />
+                                        <div ng-repeat="(key, data) in tab.data" style="padding-left:30px; font-size:25px">
+                                            {{ key }}: {{ data }}
+                                        </div>
+                                    </div>
+                                    <div align="center" style="margin-top: 30px">
+                                        <md-button class="md-primary apiBtn" ng-click="sendAPI()" ng-href target>API 실행</md-button>
+                                    </div>
+                                </div>
+                            </md-tab>
+                        </md-tabs>
+                    </md-content>
+                </div>
+            </md-grid-tile>
+            <md-grid-tile class="ivory" md-rowspan="14" md-colspan="1"></md-grid-tile>
+            <md-grid-tile class="ivory" md-rowspan="14" md-colspan="11" md-whiteframe="6">
+                <div layout="column" layout-fill>
+                    <md-toolbar>
+                        <div class="md-toolbar-tools" align="center">
+                            <h1 class="md-flex">OUPUT</h1>
+                        </div>
+                    </md-toolbar>
+                    <md-content style="width: 100%; height: 100%; background-color: #FAFAFA">
+                        <md-tabs md-border-bottom flex style="height: 600px">
+                            <md-tab label="response">
+                                <div class="md-padding" style="font-size:25px">
+                                    <div ng-show="isLoading">
+                                        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+                                    </div>
+                                </div>
+                            </md-tab>
+                        </md-tabs>
+                    </md-content>
+                </div>
+            </md-grid-tile>
+        </md-grid-list>
+
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+        <!-- Angular Material Library -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+        <script>
+            var hiChartApp = angular.module('EMRApp', ['ngMaterial', 'ngMessages']).run(function() {
+                console.log('hichartApp is ready!');
+            });
+            hiChartApp.controller('EMRCtrl', function($scope, $http) {
+                $scope.APIs = [
+                    '의료기관',
+                    '가입자 관리',
+                    '전화번호 인증',
+                    '관리자',
+                    '사용자',
+                    '컨텐츠 조회',
+                    '의료기관 MyLists',
+                    '사용자 Bookmarks',
+                    '사용자 Mylists',
+                    '설명처방 전송',
+                    '동영상 재생',
+                    'API 갱신'
+                ];
+                $scope.curTab = [];
+                var tabs = [
+                    [
+                        {
+                            title: '정보조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '사용 등록',
+                            type: 'PUT',
+                            url: '',
+                            data: {
+                                email: 'dhkim@hichart.net',
+                                reg_key: 'this is my reg_key'
+                            }
+                        },  {
+                            title: '사용 등록 확인',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '의료 기관 정보 수정',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '사용 해지',
+                            type: 'PUT',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '의료 기관 내 가입자 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '의료 기관 내 가입자 삭제',
+                            type: 'DELETE',
+                            url: ''
+                        }, {
+                            title: '의료 기관 내 관리자 변경',
+                            type: 'PUT',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '전화번호 인증을 위한 인증번호 전송',
+                            type: 'POST',
+                            url: ''
+                        },  {
+                            title: '인증번호 검증',
+                            type: 'PUT',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '관리자 가입',
+                            type: 'POST',
+                            url: ''
+                        }, {
+                            title: '의료기관 대표 Image 업로드 URL 가져오기',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '의료기관 대료 Image 업로드하기',
+                            type: 'POST',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '사용가 가입 여부 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '사용자 가입',
+                            type: 'POST',
+                            url: ''
+                        }, {
+                            title: '사용자 정보 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '사용자 정보 수정',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '사용자 EMR 탈퇴',
+                            type: 'DELETE',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '설명 Animation List 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '주제별 묶음 Video List 조회',
+                            type: 'GET',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '의료 기관 My List 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '의료 기관 My List 생성',
+                            type: 'POST',
+                            url: ''
+                        }, {
+                            title: '의료 기관 My List 수정',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '의료 기관 My List 삭제',
+                            type: 'DELETE',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '사용자 Bookmarks 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '사용자 Bookmarks 1개 추가',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '사용자 Bookmarks n개 추가',
+                            type: 'POST',
+                            url: ''
+                        }, {
+                            title: '사용자 Bookmarks 1개 삭제',
+                            type: 'DELETE',
+                            url: ''
+                        }, {
+                            title: '사용자 Bookmarks n개 삭제',
+                            type: 'POST',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '사용자 My List 조회',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '사용자 My List 생성',
+                            type: 'POST',
+                            url: ''
+                        }, {
+                            title: '사용자 My List 수정',
+                            type: 'PUT',
+                            url: ''
+                        }, {
+                            title: '사용자 My List 삭제',
+                            type: 'DELETE',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: '설명처방 전송',
+                            type: 'POST',
+                            url: ''
+                        }
+                    ],
+                    [
+                        {
+                            title: 'Play Animation within Web Browser',
+                            type: '',
+                            url: ''
+                        }
+                    ],  [
+                        {
+                            title: '새로운 키 발급',
+                            type: 'GET',
+                            url: ''
+                        }, {
+                            title: '발급 확인',
+                            type: 'PUT',
+                            url: ''
+                        }
+                    ]
+                ];
+                $scope.isLoading = false;
+                $scope.changeTab = function(index) {
+                    $scope.curTab = tabs[index];
+                }
+                $scope.sendAPI = function() {
+                    $scope.isLoading = !$scope.isLoading;
+                }
+            });
+        </script>
+    </body>
+</html>
